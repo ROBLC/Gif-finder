@@ -1,88 +1,143 @@
-var searchButtons = ["jurassic Park", "Star Wars", "Indiana Jones", "Matrix"]
+//Set up global variables
+var searchButtons = ["jurassic Park", "star wars", "indiana jones", "matrix", "rocky"]
 var newsSearch;
 var still;
 var animate;
+var i;
+var search = "";
+
 //Show buttons with info from searchButtons 
 function renderButtons() {
     // Empties array so we dont repeat buttons 
     $("#buttonsDiv").empty();
-    //loops through searchButtons and makes a button for each element
+    //Loops through searchButtons and makes a button for each element
     for (i = 0; i < searchButtons.length; i++) {
-        $("<button>").attr("data-search", searchButtons[i]).text(searchButtons[i]).addClass("btn btn-info m-1 searchItem").appendTo("#buttonsDiv");
+        $("<button>").attr("data-search", searchButtons[i].toLowerCase()).text(searchButtons[i]).addClass("btn m-1 searchItem").appendTo("#buttonsDiv");
     }
 }
+//Function to get GIFs from giphy API when calling from button
 function getGifs() {
+    //Clears previously filled divs in HTML
     $("#gif-area").empty();
-    var search = $(this).attr("data-search");
+    $(".card-footer").empty();
+    //sets search value to button data-search
+    search = $(this).attr("data-search");
+    //Establish variable to store giphy API link with dynamic user input 
     var GIFqueryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=10"
     console.log(search);
-
+    //Resets i to 0 before running ajax
+    i = 0;
+    //Runs ajax to get response from giphy API then dynamically creates a bootstrap card for each instance of i with a for loop   
     $.ajax({
         url: GIFqueryURL,
         method: "GET"
     }).then(function (response) {
         console.log(response);
         var gifsArray = response.data
-        for (var i = 0; i < gifsArray.length; i++) {
+        for (i = 0; i < gifsArray.length; i++) {
             var columnDiv = $("<div>").addClass("col-md-4 float-left");
             var cardDiv = $("<div>").addClass("card mb-4").appendTo(columnDiv);
             var gifImg = $("<img>").addClass("card-img-top GIF").attr("data-animate", gifsArray[i].images.fixed_height.url).attr("data-still", gifsArray[i].images.fixed_height_still.url).attr("src", gifsArray[i].images.fixed_height_still.url).attr("data-state", "still").appendTo(cardDiv);
             gifImg.attr("height", "200px").attr("width", "200px")
-            var cardBody = $("<div>").addClass("card-body").appendTo(cardDiv);
+            var cardBody = $("<div>").addClass("card-body gif-card-body").appendTo(cardDiv);
             var cardText = $("<div>").addClass("card-text").appendTo(cardBody);
             var title = $("<p>").text("Title: " + gifsArray[i].title).addClass("mb-1").appendTo(cardText);
             var rating = $("<p>").text("Rating: " + gifsArray[i].rating).addClass("mb-1").appendTo(cardText);
             $(columnDiv).prependTo($("#gif-area"))
         }
     });
+    //creates button to be able to ask for more GIFs
+    $("<button>").addClass("btn").text("Give me more GIFs!!").attr("id", "moreButton").appendTo(".card-footer");
+    $("#gif-area-text").css("display", "none");
 }
-
+//Function to get GIFs from giphy API when calling directly from intial search button (same as getGifs just sets search equal to newSearch instead of this)
 function getGifs2() {
+    //Clears previously filled divs in HTML
     $("#gif-area").empty();
-    var search = newSearch;
+    $(".card-footer").empty();
+    //sets search value equal to newSearch
+    search = newSearch;
+    //Establish variable to store giphy API link with dynamic user input 
     var GIFqueryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=10"
     console.log(search);
-
+    //Resets i to 0 before running ajax
+    i = 0;
+    //Runs ajax to get response from giphy API then dynamically creates a bootstrap card for each instance of i with a for loop  
     $.ajax({
         url: GIFqueryURL,
         method: "GET"
     }).then(function (response) {
         console.log(response);
         var gifsArray = response.data
-        for (var i = 0; i < gifsArray.length; i++) {
+        for (i = 0; i < gifsArray.length; i++) {
             var columnDiv = $("<div>").addClass("col-md-4 float-left");
             var cardDiv = $("<div>").addClass("card mb-4").appendTo(columnDiv);
             var gifImg = $("<img>").addClass("card-img-top GIF").attr("data-animate", gifsArray[i].images.fixed_height.url).attr("data-still", gifsArray[i].images.fixed_height_still.url).attr("src", gifsArray[i].images.fixed_height_still.url).attr("data-state", "still").appendTo(cardDiv);
             gifImg.attr("height", "200px").attr("width", "200px")
-            var cardBody = $("<div>").addClass("card-body").appendTo(cardDiv);
+            var cardBody = $("<div>").addClass("card-body gif-card-body").appendTo(cardDiv);
             var cardText = $("<div>").addClass("card-text").appendTo(cardBody);
             var title = $("<p>").text("Title: " + gifsArray[i].title).addClass("mb-1").appendTo(cardText);
             var rating = $("<p>").text("Rating: " + gifsArray[i].rating).addClass("mb-1").appendTo(cardText);
             $(columnDiv).prependTo($("#gif-area"))
         }
     });
+    //creates button to be able to ask for more GIFs
+    $("<button>").addClass("btn").text("Give me more GIFs!!").attr("id", "moreButton").appendTo(".card-footer");
+    $("#gif-area-text").css("display", "none");
 }
-
+//Function to get more GIFs from giphy API
+function moreGifs() {
+    //Sets local variable j 
+    var j = i + 10;
+    //Establish variable to store giphy API link with dynamic user input
+    var GIFqueryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=200"
+    console.log(search);
+    //runs ajax and dynamically creates another 10 cards with gifs in them each times its run, uses for loop with variables i and j to get the right gifs and the correct length
+    $.ajax({
+        url: GIFqueryURL,
+        method: "GET"
+    }).then(function (response) {
+        console.log(i);
+        console.log(response);
+        var gifsArray = response.data
+        for (i; i < j; i++) {
+            var columnDiv = $("<div>").addClass("col-md-4 float-left");
+            var cardDiv = $("<div>").addClass("card mb-4").appendTo(columnDiv);
+            var gifImg = $("<img>").addClass("card-img-top GIF").attr("data-animate", gifsArray[i].images.fixed_height.url).attr("data-still", gifsArray[i].images.fixed_height_still.url).attr("src", gifsArray[i].images.fixed_height_still.url).attr("data-state", "still").appendTo(cardDiv);
+            gifImg.attr("height", "200px").attr("width", "200px")
+            var cardBody = $("<div>").addClass("card-body gif-card-body").appendTo(cardDiv);
+            var cardText = $("<div>").addClass("card-text").appendTo(cardBody);
+            var title = $("<p>").text("Title: " + gifsArray[i].title).addClass("mb-1").appendTo(cardText);
+            var rating = $("<p>").text("Rating: " + gifsArray[i].rating).addClass("mb-1").appendTo(cardText);
+            $(columnDiv).appendTo($("#gif-area"))
+            console.log(i);
+        }
+        console.log(i);
+    });
+}
+//Event listener for click on search 
 $("#addSearch").on("click", function (event) {
+    //Prevents form to submit/refresh
     event.preventDefault();
-
-    newSearch = $("#searchInput").val().trim();
+    //sets newSearch to user input
+    newSearch = $("#searchInput").val().trim().toLowerCase();
     //if statement to check if a search is already in array 
     if (searchButtons.includes(newSearch)) {
-        console.log("already in array")
+        alert("already in array")
     }
     else {
         searchButtons.push(newSearch);
+        getGifs2();
     }
-    // The renderButtons function is called, rendering the list of movie buttons
+    // Renders the buttons in array 
     renderButtons();
-    //reset the form each time a search is added
+    //Reset the form each time a search is added
     $("#searchForm")[0].reset();
-    getGifs2();
-});
-renderButtons();
 
+});
+//Event listener for searchButtons that runs the getGifs function when pressed
 $(document).on("click", ".searchItem", getGifs)
+//Event listener for GIFs that animate or pause the GIF on click
 $(document).on("click", ".GIF", function () {
     console.log(this);
     var state = $(this).attr("data-state");
@@ -95,6 +150,11 @@ $(document).on("click", ".GIF", function () {
         $(this).attr("data-state", "still");
     }
 });
+//Event listener for the more button at bottom that loads 10 more gifs each time
+$(document).on("click", "#moreButton", moreGifs);
+//Makes intial buttons for the string preloaded in searchButtons when you first open page
+renderButtons();
+
 
 
 
