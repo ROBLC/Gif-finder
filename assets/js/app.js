@@ -23,7 +23,7 @@ function getGifs() {
     //sets search value to button data-search
     search = $(this).attr("data-search");
     //Establish variable to store giphy API link with dynamic user input 
-    var GIFqueryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=10"
+    var GIFqueryURL = "https://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=10"
     console.log(search);
     //Resets i to 0 before running ajax
     i = 0;
@@ -58,7 +58,7 @@ function getGifs2() {
     //sets search value equal to newSearch
     search = newSearch;
     //Establish variable to store giphy API link with dynamic user input 
-    var GIFqueryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=10"
+    var GIFqueryURL = "https://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=10"
     console.log(search);
     //Resets i to 0 before running ajax
     i = 0;
@@ -90,7 +90,7 @@ function moreGifs() {
     //Sets local variable j 
     var j = i + 10;
     //Establish variable to store giphy API link with dynamic user input
-    var GIFqueryURL = "http://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=200"
+    var GIFqueryURL = "https://api.giphy.com/v1/gifs/search?q=" + search + "&api_key=MNeVSWOTAJfR0WYeV1TbsDchBXgR4yhS&limit=200"
     console.log(search);
     //runs ajax and dynamically creates another 10 cards with gifs in them each times its run, uses for loop with variables i and j to get the right gifs and the correct length
     $.ajax({
