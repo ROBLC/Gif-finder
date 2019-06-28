@@ -1,4 +1,4 @@
-# Gif-finder
+# GIF-finder
 Awesome web app to find gifs!! [Find some gifs](https://roblc.github.io/Gif-finder/)
 ## How to use
 Easy:
